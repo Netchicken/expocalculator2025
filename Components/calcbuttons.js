@@ -4,7 +4,7 @@ import {
 } from "react-native";
 import React, { useMemo } from "react";
 import { PressableButton } from "./AllButtons";
-
+import { useCalcButtonStyles } from "../AllStyles/calcButtonStyles";
 // This component shows calculator buttons (+, *, /, -)
 export const CalcButtons = ({ updateCalculation }) => {
   // Use a hook to memoize styles so they don't get recreated every render
@@ -19,19 +19,3 @@ export const CalcButtons = ({ updateCalculation }) => {
     </View>
   );
 };
-
-// Custom hook for styles
-const useCalcButtonStyles = () =>
-  useMemo(
-    () =>
-      StyleSheet.create({
-        rowcontainer: {
-          flexDirection: "row", // Arrange buttons in a row
-          width: "100%", // Full width
-          alignContent: "flex-start",
-          flexWrap: "wrap", // Allow wrapping if needed
-          justifyContent: "space-between", // Space between buttons
-        },
-      }),
-    []
-  );
