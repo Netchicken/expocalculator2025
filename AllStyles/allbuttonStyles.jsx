@@ -3,10 +3,14 @@ import { useMemo } from "react";
 
 // Custom hook to create and memoize button styles
 export const useButtonStyles = () => {
-  // Get the screen size
-  const screen = Dimensions.get("window");
-  // Calculate button width based on screen width
-  const buttonWidth = useMemo(() => screen.width / 4, [screen.width]);
+  const { width, height } = Dimensions.get("window");
+  // Responsive scaling helpers
+  const scale = width / 375; // 375 is a common base width (iPhone 11)
+  const verticalScale = height / 812; // 812 is a common base height
+
+  const rs = (size) => Math.round(size * scale);
+  const vs = (size) => Math.round(size * verticalScale);
+  const buttonWidth = width / 4;
 
   // Create styles using the calculated button width
   return useMemo(
@@ -20,8 +24,8 @@ export const useButtonStyles = () => {
           height: Math.floor(buttonWidth - 40),
           alignItems: "center",
           justifyContent: "center",
-          borderRadius: 18,
-          margin: 6,
+          borderRadius: rs(18),
+          margin: rs(6),
           elevation: 2, // Subtle shadow (Android)
           shadowColor: "#1976d2", // Shadow (iOS)
           shadowOffset: { width: 0, height: 2 },
@@ -30,7 +34,7 @@ export const useButtonStyles = () => {
         },
         text: {
           color: "#1976d2", // Deep blue text
-          fontSize: 24,
+          fontSize: rs(24),
           fontWeight: "600",
           letterSpacing: 1,
         },
@@ -42,8 +46,8 @@ export const useButtonStyles = () => {
           borderColor: "#81c784", // Soft green border
           backgroundColor: "#e8f5e9", // Light green background
           alignSelf: "stretch",
-          borderRadius: 18,
-          margin: 6,
+          borderRadius: rs(18),
+          margin: rs(6),
           elevation: 2,
           shadowColor: "#388e3c",
           shadowOffset: { width: 0, height: 2 },
@@ -52,12 +56,12 @@ export const useButtonStyles = () => {
         },
         textPress: {
           color: "#388e3c", // Deep green text
-          fontSize: 22,
+          fontSize: rs(22),
           fontWeight: "bold",
           letterSpacing: 1,
           textAlignVertical: "center",
         },
       }),
-    [buttonWidth]
+    [width, height]
   );
 };

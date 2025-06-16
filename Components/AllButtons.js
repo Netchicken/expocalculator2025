@@ -1,11 +1,9 @@
 import {
-  Dimensions, // Lets us get the size of the screen
-  StyleSheet, // Lets us write styles like CSS
   Text, // Used to show text
   TouchableOpacity, // A button that fades when pressed
   Pressable, // A button that can detect different press states
 } from "react-native";
-import React, { useMemo } from "react";
+
 import { useButtonStyles } from "../AllStyles/allbuttonStyles"; // Import styles from allStyles.js
 
 export const TouchableOpacityButton = ({ onPress, text }) => {

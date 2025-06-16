@@ -5,8 +5,6 @@ import { Row } from "./Row"; // Import Row component
 
 // This component shows number and function buttons for the calculator
 export const NumberButtons = ({ updateCalculation }) => {
-  const styles = useNumberButtonStyles();
-
   return (
     <View>
       <Row>
@@ -78,12 +76,3 @@ export const NumberButtons = ({ updateCalculation }) => {
     </View>
   );
 };
-
-// Custom hook for styles, only created once
-const useNumberButtonStyles = () =>
-  useMemo(
-    () => ({
-      // You can keep your rowcontainer style here if needed for spacing
-    }),
-    []
-  );

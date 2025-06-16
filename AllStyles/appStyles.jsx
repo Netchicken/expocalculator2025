@@ -1,7 +1,18 @@
 import { StyleSheet, Dimensions } from "react-native";
 import { useMemo } from "react";
-export const useAppStyles = () =>
-  useMemo(
+
+export const useAppStyles = () => {
+  const { width, height } = Dimensions.get("window");
+
+  // Responsive font and spacing helpers
+  const scale = width / 375; // 375 is a common base width (iPhone 11)
+  const verticalScale = height / 812; // 812 is a common base height
+
+  // Helper function for scaling
+  const rs = (size) => Math.round(size * scale);
+  const vs = (size) => Math.round(size * verticalScale);
+
+  return useMemo(
     () =>
       StyleSheet.create({
         image: {
@@ -11,47 +22,46 @@ export const useAppStyles = () =>
           height: "100%",
         },
         container: {
-          // fontSize: 40,
           flex: 1,
-          marginTop: 30, // Add margin to the top
+          marginTop: vs(32),
+          paddingHorizontal: rs(12),
         },
         calcBox: {
-          minHeight: 50, // Minimum height for one line
-          maxHeight: 130, // Maximum height for two lines
+          minHeight: vs(50), // Minimum height for one line
+          maxHeight: vs(100), // Maximum height for two lines
           justifyContent: "center", // Center children vertically
           alignItems: "center", // Center children horizontally
-          borderRadius: 40,
-          paddingHorizontal: 16, // Horizontal padding (left & right)
-          paddingVertical: 12, // Vertical padding (top & bottom)
+          borderRadius: rs(32),
+          paddingHorizontal: rs(18), // Horizontal padding (left & right)
+          paddingVertical: vs(12), // Vertical padding (top & bottom)
           backgroundColor: "oldlace",
-          marginBottom: 10,
+          marginBottom: vs(28),
           borderWidth: 1,
         },
         outputText: {
           fontWeight: "bold",
           textAlign: "center", // Center text horizontally
           textAlignVertical: "center", // Center text vertically (Android only)
-          fontSize: 30,
+          fontSize: rs(30),
           color: "#333",
-          lineHeight: 50, // Should match container height for vertical centering
+          lineHeight: vs(36), // Should match container height for vertical centering
         },
 
         sectionTitle: {
-          marginTop: 24, // Add space above the box
-          color: "#1976d2", // A modern blue shade
-          fontSize: 28, // Larger font for emphasis
-          fontWeight: "bold", // Bold text
-          textAlign: "center", // Centered text
-          marginBottom: 18, // Space below the title
-          letterSpacing: 2, // Spaced out letters
-          textTransform: "uppercase", // Uppercase for style
-          backgroundColor: "#e3f2fd", // Soft blue background
-          paddingVertical: 10, // Vertical padding
-          paddingHorizontal: 20, // Horizontal padding
-          borderRadius: 16, // Rounded corners
-          overflow: "hidden", // Ensures background stays rounded
-          elevation: 2, // Subtle shadow on Android
-          shadowColor: "#000", // Shadow for iOS
+          color: "#1976d2",
+          fontSize: rs(28),
+          fontWeight: "bold",
+          textAlign: "center",
+          marginBottom: vs(18),
+          letterSpacing: 1.5 * scale,
+          textTransform: "uppercase",
+          backgroundColor: "#e3f2fd",
+          paddingVertical: vs(10),
+          paddingHorizontal: rs(20),
+          borderRadius: rs(16),
+          overflow: "hidden",
+          elevation: 2,
+          shadowColor: "#000",
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.12,
           shadowRadius: 4,
@@ -59,15 +69,19 @@ export const useAppStyles = () =>
 
         // Example list styles (if needed)
         liContainer: {
-          backgroundColor: "#fff",
+          backgroundColor: "#f5f5f5",
           flex: 1,
-          paddingLeft: 5,
+          paddingLeft: rs(8),
+          paddingVertical: vs(4),
+          borderRadius: rs(8),
+          marginBottom: vs(6),
         },
         liText: {
           color: "#333",
-          fontSize: 17,
+          fontSize: rs(17),
           fontWeight: "400",
         },
       }),
     []
   );
+};
