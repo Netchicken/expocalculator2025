@@ -7,6 +7,7 @@ export const useCalcButtonStyles = () =>
     () =>
       StyleSheet.create({
         rowcontainer: {
+          marginTop: 30, // Add margin to the top
           flexDirection: "row", // Arrange buttons in a row
           width: "100%", // Full width
           alignContent: "flex-start",
