@@ -1,7 +1,8 @@
 import { StyleSheet, View } from "react-native";
-import React from "react";
+import React, { useMemo } from "react";
 //in the row component, there is 1 prop that we need, namely: children
 export const Row = ({ children }) => {
+  const styles = useRowStyles();
   return <View style={styles.rowcontainer}>{children}</View>;
 };
 

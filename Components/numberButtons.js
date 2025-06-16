@@ -1,16 +1,15 @@
-import { StyleSheet, View } from "react-native";
 import React, { useMemo } from "react";
+import { View } from "react-native";
 import { TouchableOpacityButton } from "./AllButtons";
+import { Row } from "./Row"; // Import Row component
 
 // This component shows number and function buttons for the calculator
 export const NumberButtons = ({ updateCalculation }) => {
-  // Use a hook to memoize styles
   const styles = useNumberButtonStyles();
 
   return (
     <View>
-      {/* First row: 0, 1, 2 */}
-      <View style={styles.rowcontainer}>
+      <Row>
         <TouchableOpacityButton
           text="0"
           onPress={() => updateCalculation("0")}
@@ -23,9 +22,8 @@ export const NumberButtons = ({ updateCalculation }) => {
           text="2"
           onPress={() => updateCalculation("2")}
         />
-      </View>
-      {/* Second row: 3, 4, 5 */}
-      <View style={styles.rowcontainer}>
+      </Row>
+      <Row>
         <TouchableOpacityButton
           text="3"
           onPress={() => updateCalculation("3")}
@@ -38,9 +36,8 @@ export const NumberButtons = ({ updateCalculation }) => {
           text="5"
           onPress={() => updateCalculation("5")}
         />
-      </View>
-      {/* Third row: 6, 7, 8 */}
-      <View style={styles.rowcontainer}>
+      </Row>
+      <Row>
         <TouchableOpacityButton
           text="6"
           onPress={() => updateCalculation("6")}
@@ -53,9 +50,8 @@ export const NumberButtons = ({ updateCalculation }) => {
           text="8"
           onPress={() => updateCalculation("8")}
         />
-      </View>
-      {/* Fourth row: 9, ., Del */}
-      <View style={styles.rowcontainer}>
+      </Row>
+      <Row>
         <TouchableOpacityButton
           text="9"
           onPress={() => updateCalculation("9")}
@@ -68,9 +64,8 @@ export const NumberButtons = ({ updateCalculation }) => {
           text="Del"
           onPress={() => updateCalculation("del")}
         />
-      </View>
-      {/* Fifth row: =, Clear */}
-      <View style={styles.rowcontainer}>
+      </Row>
+      <Row>
         <TouchableOpacityButton
           text="="
           onPress={() => updateCalculation("=")}
@@ -79,7 +74,7 @@ export const NumberButtons = ({ updateCalculation }) => {
           text="Clear"
           onPress={() => updateCalculation("clear")}
         />
-      </View>
+      </Row>
     </View>
   );
 };
@@ -87,13 +82,8 @@ export const NumberButtons = ({ updateCalculation }) => {
 // Custom hook for styles, only created once
 const useNumberButtonStyles = () =>
   useMemo(
-    () =>
-      StyleSheet.create({
-        rowcontainer: {
-          flexDirection: "row", // Arrange buttons in a row
-          alignContent: "flex-start",
-          flexWrap: "wrap", // Allow wrapping if needed
-        },
-      }),
+    () => ({
+      // You can keep your rowcontainer style here if needed for spacing
+    }),
     []
   );

@@ -13,37 +13,48 @@ export const useButtonStyles = () => {
     () =>
       StyleSheet.create({
         button: {
-          borderWidth: 3, // Border thickness
-          borderColor: "#64dded", // Border color
-          backgroundColor: "#ffffff", // Button background color
-          flex: 1, // Take up available space
-          height: Math.floor(buttonWidth - 55), // Button height
-          alignItems: "center", // Center content horizontally
-          justifyContent: "center", // Center content vertically
-          borderRadius: Math.floor(buttonWidth), // Rounded corners
-          margin: 5, // Space around button
+          borderWidth: 2,
+          borderColor: "#90caf9", // Soft blue border
+          backgroundColor: "#e3f2fd", // Light blue background
+          flex: 1,
+          height: Math.floor(buttonWidth - 40),
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 18,
+          margin: 6,
+          elevation: 2, // Subtle shadow (Android)
+          shadowColor: "#1976d2", // Shadow (iOS)
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 4,
         },
         text: {
-          color: "#060606",
+          color: "#1976d2", // Deep blue text
           fontSize: 24,
+          fontWeight: "600",
+          letterSpacing: 1,
         },
-
         buttonPress: {
           flex: 1,
           justifyContent: "center",
-          borderWidth: 3,
-          borderColor: "#23e25c",
-          backgroundColor: "#f06464",
           alignItems: "center",
+          borderWidth: 2,
+          borderColor: "#81c784", // Soft green border
+          backgroundColor: "#e8f5e9", // Light green background
           alignSelf: "stretch",
-          borderRadius: Math.floor(buttonWidth),
-          margin: 5,
+          borderRadius: 18,
+          margin: 6,
+          elevation: 2,
+          shadowColor: "#388e3c",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 4,
         },
-
         textPress: {
-          color: "white",
-          fontSize: 20,
+          color: "#388e3c", // Deep green text
+          fontSize: 22,
           fontWeight: "bold",
+          letterSpacing: 1,
           textAlignVertical: "center",
         },
       }),
