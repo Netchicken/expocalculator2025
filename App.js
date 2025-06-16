@@ -7,7 +7,7 @@ import {
   ImageBackground,
   FlatList,
 } from "react-native";
-import { React, useState } from "react";
+import { React, useState, useMemo } from "react";
 import { CalcButtons } from "./Components/calcbuttons";
 import { NumberButtons } from "./Components/numberButtons";
 import { DbButtons } from "./Components/DbButtons";
@@ -22,14 +22,14 @@ const App = () => {
   const [calculation, setCalculation] = useState("");
 
   // Example data for database display (not currently used)
-  const DbDisplay = useMemo(
-    () => [
-      { id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba", answer: "First Item" },
-      { id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63", answer: "Second Item" },
-      { id: "58694a0f-3da1-471f-bd96-145571e29d72", answer: "Third Item" },
-    ],
-    []
-  );
+  // const DbDisplay = useMemo(
+  //   () => [
+  //     { id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba", answer: "First Item" },
+  //     { id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63", answer: "Second Item" },
+  //     { id: "58694a0f-3da1-471f-bd96-145571e29d72", answer: "Third Item" },
+  //   ],
+  //   []
+  // );
 
   // Handle calculator button presses
   const updateCalculation = (value) => {
@@ -81,8 +81,8 @@ const App = () => {
               {/* Calculator and database buttons */}
               <CalcButtons updateCalculation={updateCalculation} />
               <NumberButtons updateCalculation={updateCalculation} />
-              <DbButtons sqlOperation={sqlOperation} />
-              <GetDb />
+              {/* <DbButtons sqlOperation={sqlOperation} />
+              <GetDb /> */}
             </View>
           </ScrollView>
         </SafeAreaView>

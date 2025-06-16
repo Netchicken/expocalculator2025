@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import SQLite from "react-native-sqlite-2";
+//import SQLite from "react-native-sqlite-2";
+import SQLite from "react-native-sqlite-storage"; // Import SQLite for database operations
 import {
   Text, // Renders text
   SafeAreaView,
   ScrollView,
   View,
 } from "react-native";
-import { useDbOperationStyles } from "./AllStyles/dbOperationStyles"; // Import styles
+import { useDbOperationStyles } from "../AllStyles/dbOperationsStyles"; // Import styles
 
 const databaseName = "calcDB.db";
 let singleAnswer = "";
@@ -23,12 +24,21 @@ export const GetDb = () => {
 
   useEffect(() => {
     // Open the database
-    const db = SQLite.openDatabase({
-      name: databaseName,
-      location: "default",
-      createFromLocation: "~calcDB.db",
-    });
+    const db = SQLite.openDatabase(
+      { name: "calcDB.db", location: "default" },
+      () => {
+        console.log("DB opened");
+      },
+      (error) => {
+        console.log("DB open error:", error);
+      }
+    );
+    //Check that db is not null before using it:
 
+    if (!db) {
+      console.log("Database not opened!");
+      return;
+    }
     // SQL to create table if it doesn't exist
     const createString =
       "CREATE TABLE IF NOT EXISTS AllAnswers(Id INTEGER PRIMARY KEY AUTOINCREMENT, answer TEXT)";
@@ -73,11 +83,12 @@ export const GetDb = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        {listAnswers.map((item, index) => (
-          <View key={index}>
-            <Text style={styles.text}>{item}</Text>
-          </View>
-        ))}
+        {listAnswers &&
+          listAnswers.map((item, index) => (
+            <View key={index}>
+              <Text style={styles.text}>{item}</Text>
+            </View>
+          ))}
       </ScrollView>
     </SafeAreaView>
   );

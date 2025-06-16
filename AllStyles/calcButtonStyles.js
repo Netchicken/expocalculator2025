@@ -2,7 +2,7 @@
 import { StyleSheet } from "react-native";
 import { useMemo } from "react";
 
-const useCalcButtonStyles = () =>
+export const useCalcButtonStyles = () =>
   useMemo(
     () =>
       StyleSheet.create({
