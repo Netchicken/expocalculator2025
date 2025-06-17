@@ -10,6 +10,34 @@ import { CalcButtons } from "./Components/calcbuttons";
 import { NumberButtons } from "./Components/numberButtons";
 import { useAppStyles } from "./AllStyles/appStyles"; // Custom hook for app styles
 
+import { createStaticNavigation } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+//function name is where it navigates to
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text>Home Screen</Text>
+      <Button onPress={() => navigation.navigate("DBScreen")}>
+        Go to Details
+      </Button>
+    </View>
+  );
+}
+
+const RootStack = createNativeStackNavigator({
+  initialRouteName: "Calculator",
+  screenOptions: {
+    headerStyle: { backgroundColor: "tomato" },
+  },
+  screens: {
+    Home: { screen: HomeScreen, options: { title: "Overview" } },
+    Details: DetailsScreen,
+  },
+});
+
+const Navigation = createStaticNavigation(RootStack);
+
 // Main App component
 const App = () => {
   // State for calculator input/output
@@ -45,6 +73,7 @@ const App = () => {
       source={require("./Assets/bgImage.png")} // Background image
       style={styles.image}
     >
+      <Navigation />
       <View style={styles.container}>
         <SafeAreaView>
           <ScrollView>
