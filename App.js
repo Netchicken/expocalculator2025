@@ -8,8 +8,6 @@ import {
 } from "react-native";
 import { CalcButtons } from "./Components/calcbuttons";
 import { NumberButtons } from "./Components/numberButtons";
-import { DbButtons } from "./Components/DbButtons";
-import { GetDb, PassData } from "./Operations/DbOperations";
 import { useAppStyles } from "./AllStyles/appStyles"; // Custom hook for app styles
 
 // Main App component
@@ -35,14 +33,6 @@ const App = () => {
       setCalculation(calculation.slice(0, -1)); // Remove last character
     } else {
       setCalculation(calculation + String(value)); // Add the pressed value to the calculation string
-    }
-  };
-  //Database functions
-  //value = the new answer to be added to the database
-  const sqlOperation = (value) => {
-    console.log("App sqlOperation ", value);
-    if (value === "Display") {
-      PassData(value);
     }
   };
 
