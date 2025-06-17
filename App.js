@@ -1,42 +1,29 @@
+import React, { useState, useMemo } from "react";
 import {
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   View,
   ImageBackground,
-  FlatList,
 } from "react-native";
-import { React, useState, useMemo } from "react";
 import { CalcButtons } from "./Components/calcbuttons";
 import { NumberButtons } from "./Components/numberButtons";
 import { DbButtons } from "./Components/DbButtons";
 import { GetDb, PassData } from "./Operations/DbOperations";
-import { useAppStyles } from "./AllStyles/appStyles"; // Import styles from appStyles.js
-
-//https://towardsdev.com/how-to-build-a-calculator-app-using-react-native-a-step-by-step-tutorial-40ae327fae5f
+import { useAppStyles } from "./AllStyles/appStyles"; // Custom hook for app styles
 
 // Main App component
 const App = () => {
   // State for calculator input/output
   const [calculation, setCalculation] = useState("");
 
-  // Example data for database display (not currently used)
-  // const DbDisplay = useMemo(
-  //   () => [
-  //     { id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba", answer: "First Item" },
-  //     { id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63", answer: "Second Item" },
-  //     { id: "58694a0f-3da1-471f-bd96-145571e29d72", answer: "Third Item" },
-  //   ],
-  //   []
-  // );
-
   // Handle calculator button presses
   const updateCalculation = (value) => {
     if (value === "=") {
       // Evaluate the calculation string
       try {
-        // eslint-disable-next-line no-new-func
+        // Evaluate the calculation using JavaScript's Function constructor
+        // WARNING: In production, never use eval or Function with user input!
         let answer = new Function("return " + calculation)();
         setCalculation(calculation + "=" + answer);
       } catch {
@@ -47,7 +34,7 @@ const App = () => {
     } else if (value === "del") {
       setCalculation(calculation.slice(0, -1)); // Remove last character
     } else {
-      setCalculation(calculation + String(value)); // Add value to string
+      setCalculation(calculation + String(value)); // Add the pressed value to the calculation string
     }
   };
   //Database functions
@@ -65,7 +52,7 @@ const App = () => {
   return (
     <ImageBackground
       resizeMode="cover"
-      source={require("./Assets/bgImage.png")}
+      source={require("./Assets/bgImage.png")} // Background image
       style={styles.image}
     >
       <View style={styles.container}>
@@ -80,11 +67,9 @@ const App = () => {
                   {calculation || "Enter a number"}
                 </Text>
               </View>
-              {/* Calculator and database buttons */}
+
               <CalcButtons updateCalculation={updateCalculation} />
               <NumberButtons updateCalculation={updateCalculation} />
-              {/* <DbButtons sqlOperation={sqlOperation} />
-              <GetDb /> */}
             </View>
           </ScrollView>
         </SafeAreaView>
