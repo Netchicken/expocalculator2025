@@ -26,7 +26,7 @@ function HomeScreen() {
 }
 
 const RootStack = createNativeStackNavigator({
-  initialRouteName: "Calculator",
+  initialRouteName: "Home",
   screenOptions: {
     headerStyle: { backgroundColor: "tomato" },
   },
@@ -73,7 +73,6 @@ const App = () => {
       source={require("./Assets/bgImage.png")} // Background image
       style={styles.image}
     >
-      <Navigation />
       <View style={styles.container}>
         <SafeAreaView>
           <ScrollView>
@@ -93,6 +92,7 @@ const App = () => {
           </ScrollView>
         </SafeAreaView>
       </View>
+      <Navigation />
     </ImageBackground>
   );
 };
