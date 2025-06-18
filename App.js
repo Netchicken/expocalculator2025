@@ -10,22 +10,45 @@ import { CalcButtons } from "./Components/calcbuttons";
 import { NumberButtons } from "./Components/numberButtons";
 import { useAppStyles } from "./AllStyles/appStyles"; // Custom hook for app styles
 
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  createStaticNavigation,
+  useNavigation,
+  NavigationContainer,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Button } from "@react-navigation/elements";
 
 //function name is where it navigates to
 function HomeScreen() {
+  const navigation = useNavigation();
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>Calc Screen</Text>
+      <Button onPress={() => navigation.navigate("Details")}>
+        Go to Details
+      </Button>
     </View>
   );
 }
-
+function DetailsScreen() {
+  const navigation = useNavigation();
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text>Details Screen</Text>
+      <Button onPress={() => navigation.navigate("Home")}>Go to Home</Button>
+      <Button onPress={() => navigation.goBack()}>Go back</Button>
+      <Button onPress={() => navigation.popTo("Home")}>Go to Home</Button>
+      <Button onPress={() => navigation.popToTop()}>
+        Go to the first screen in the stack
+      </Button>
+    </View>
+  );
+}
 function RootStack() {
   return (
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Details" component={DetailsScreen} />
     </Stack.Navigator>
   );
 }
