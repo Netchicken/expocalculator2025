@@ -13,20 +13,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { CalcContext } from "./Operations/calcContext"; // or wherever you define it
 
-//we need to check that there is a dabase here and working before entering the game
-// const db = SQLite.openDatabase(
-//   {
-//     name: "Store.db",
-//     location: "default",
-//   },
-//   () => {
-//     console.log("App DB open exists", "success");
-//   },
-//   (error) => {
-//     console.log("App DB open error", error);
-//   }
-// );
-
 const Tab = createBottomTabNavigator();
 // Example Home screen component
 function CalcMainScreen({ navigation }) {
@@ -57,20 +43,6 @@ function displayDBScreen({ navigation }) {
 // Main App component
 const App = () => {
   const { calcResult, setCalcResult } = useContext(CalcContext);
-  // useEffect(() => {
-  //   console.log("App Useffect", "success");
-  //   createTable();
-  // }, []);
-
-  // const createTable = () => {
-  //   db.transaction((tx) => {
-  //     tx.executeSql(
-  //       "CREATE TABLE IF NOT EXISTS " +
-  //         "Users " +
-  //         "(ID INTEGER PRIMARY KEY AUTOINCREMENT, City TEXT);"
-  //     );
-  //   });
-  // };
 
   return (
     <View>
