@@ -10,33 +10,27 @@ import { CalcButtons } from "./Components/calcbuttons";
 import { NumberButtons } from "./Components/numberButtons";
 import { useAppStyles } from "./AllStyles/appStyles"; // Custom hook for app styles
 
-import { createStaticNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 //function name is where it navigates to
 function HomeScreen() {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Home Screen</Text>
-      <Button onPress={() => navigation.navigate("DBScreen")}>
-        Go to Details
-      </Button>
+      <Text>Calc Screen</Text>
     </View>
   );
 }
 
-const RootStack = createNativeStackNavigator({
-  initialRouteName: "Home",
-  screenOptions: {
-    headerStyle: { backgroundColor: "tomato" },
-  },
-  screens: {
-    Home: { screen: HomeScreen, options: { title: "Overview" } },
-    Details: DetailsScreen,
-  },
-});
+function RootStack() {
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen name="Home" component={HomeScreen} />
+    </Stack.Navigator>
+  );
+}
 
-const Navigation = createStaticNavigation(RootStack);
+const Stack = createNativeStackNavigator();
 
 // Main App component
 const App = () => {
@@ -92,7 +86,9 @@ const App = () => {
           </ScrollView>
         </SafeAreaView>
       </View>
-      <Navigation />
+      <NavigationContainer>
+        <RootStack />
+      </NavigationContainer>
     </ImageBackground>
   );
 };

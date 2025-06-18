@@ -14,7 +14,7 @@ function DBScreen() {
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>Database Screen</Text>
       <Button onPress={() => navigation.push("DBScreen")}>
-        Go to Details... again
+        Go to Database... again
       </Button>
       <Button onPress={() => navigation.goBack()}>Go back</Button>
     </View>
@@ -22,10 +22,10 @@ function DBScreen() {
 }
 
 const RootStack = createNativeStackNavigator({
-  initialRouteName: "Calculator",
+  initialRouteName: "Home",
   screens: {
     Home: { screen: HomeScreen, options: { title: "Overview" } },
-    Details: DetailsScreen,
+    Details: DBScreen,
   },
 });
 
