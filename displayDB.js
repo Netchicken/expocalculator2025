@@ -7,7 +7,7 @@ import {
   ScrollView,
   View,
 } from "react-native";
-import { useDbOperationStyles } from "../AllStyles/dbOperationsStyles"; // Import styles
+import { useDbOperationStyles } from "./AllStyles/dbOperationsStyles"; // Import styles
 
 import { CalcContext } from "./Operations/calcContext"; // Import context for calculator operations
 
@@ -20,10 +20,10 @@ export const PassData = ({ data }) => {
 };
 
 // Component to get and display database answers
-export const GetDb = () => {
+export const displayDB = () => {
   const styles = useDbOperationStyles(); // Use custom hook for styles
   const [listAnswers, setListAnswers] = useState([]); // State for answers
-  const { calcResult, setCalcResult } = React.useContext(CalcContext);
+  const { calcResult, setCalcResult } = useContext(CalcContext);
   // singleAnswer = calcResult; // Use the latest calculation result from context
 
   useEffect(() => {

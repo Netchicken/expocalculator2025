@@ -1,13 +1,7 @@
 import React, { useState, useMemo } from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-  ImageBackground,
-} from "react-native";
+import { Text, View } from "react-native";
 import CalcMain from "./calcMain";
-import { GetDb } from "./displayDB"; // Import the displayDb component
+import { displayDB } from "./displayDB"; // Import the displayDb component
 import {
   createStaticNavigation,
   useNavigation,
@@ -41,20 +35,20 @@ function CalcMainScreen({ navigation }) {
       <Text style={{ fontSize: 24 }}>Calculator Screen</Text>
       <Button
         title="Go to Calculator"
-        onPress={() => navigation.navigate("calcMain")}
+        onPress={() => navigation.navigate({ CalcMain })}
       />
     </View>
   );
 }
 
 // Example Profile screen component
-function DbScreen({ navigation }) {
+function displayDBScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text style={{ fontSize: 24 }}>Database Screen</Text>
       <Button
         title="Go to Settings Tab"
-        onPress={() => navigation.navigate("DbOperations")}
+        onPress={() => navigation.navigate({ displayDB })}
       />
     </View>
   );
@@ -62,6 +56,7 @@ function DbScreen({ navigation }) {
 
 // Main App component
 const App = () => {
+  const { calcResult, setCalcResult } = useContext(CalcContext);
   // useEffect(() => {
   //   console.log("App Useffect", "success");
   //   createTable();
@@ -97,7 +92,7 @@ const App = () => {
             />
             <Tab.Screen
               name="Database"
-              component={DbScreen}
+              component={displayDBScreen}
               options={{ tabBarLabel: "Database" }}
             />
           </Tab.Navigator>

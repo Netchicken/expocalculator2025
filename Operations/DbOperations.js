@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 //import SQLite from "react-native-sqlite-2";
 import SQLite from "react-native-sqlite-storage"; // Import SQLite for database operations
 import {
@@ -22,7 +22,7 @@ export const PassData = ({ data }) => {
 export const GetDb = () => {
   const styles = useDbOperationStyles(); // Use custom hook for styles
   const [listAnswers, setListAnswers] = useState([]); // State for answers
-  const { calcResult, setCalcResult } = React.useContext(CalcContext);
+  const { calcResult, setCalcResult } = useContext(CalcContext);
   useEffect(() => {
     // Open the database
     const db = SQLite.openDatabase(
