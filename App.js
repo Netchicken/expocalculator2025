@@ -6,10 +6,8 @@ import {
   View,
   ImageBackground,
 } from "react-native";
-import { CalcButtons } from "./Components/calcbuttons";
-import { NumberButtons } from "./Components/numberButtons";
-import { useAppStyles } from "./AllStyles/appStyles"; // Custom hook for app styles
-
+import CalcMain from "./calcMain";
+import { GetDb } from "./displayDB"; // Import the displayDb component
 import {
   createStaticNavigation,
   useNavigation,
@@ -17,102 +15,187 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Button } from "@react-navigation/elements";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+import { CalcContext } from "./Operations/calcContext"; // or wherever you define it
+
+//we need to check that there is a dabase here and working before entering the game
+const db = SQLite.openDatabase(
+  {
+    name: "Store.db",
+    location: "default",
+  },
+  () => {
+    console.log("App DB open exists", "success");
+  },
+  (error) => {
+    console.log("App DB open error", error);
+  }
+);
 
 //function name is where it navigates to
-function HomeScreen() {
-  const navigation = useNavigation();
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Calc Screen</Text>
-      <Button onPress={() => navigation.navigate("Details")}>
-        Go to Details
-      </Button>
-    </View>
-  );
-}
-function DetailsScreen() {
-  const navigation = useNavigation();
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Details Screen</Text>
-      <Button onPress={() => navigation.navigate("Home")}>Go to Home</Button>
-      <Button onPress={() => navigation.goBack()}>Go back</Button>
-      <Button onPress={() => navigation.popTo("Home")}>Go to Home</Button>
-      <Button onPress={() => navigation.popToTop()}>
-        Go to the first screen in the stack
-      </Button>
-    </View>
-  );
-}
-function RootStack() {
-  return (
-    <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Details" component={DetailsScreen} />
-    </Stack.Navigator>
-  );
-}
+// function HomeScreen() {
+//   const navigation = useNavigation();
+//   return (
+//     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+//       <Text>Calc Screen</Text>
+//       <Button
+//         onPress={() => {
+//           /* 1. Navigate to the Details route with params */
+//           navigation.navigate("Details", {
+//             itemId: "86",
+//             result: "6 + 8 = 345",
+//           });
+//         }}
+//       >
+//         Go to Details
+//       </Button>
+//     </View>
+//   );
+// }
+
+// HomeScreen navigates to Settings tab and passes a parameter
+// function HomeScreen() {
+//   const { setUser } = React.useContext(CalcContext);
+//   return (
+//     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+//       <Text>Home!</Text>
+//       <Button
+//         title="Go to Settings with Param"
+//         onPress={() => setUser("Alice")}
+//       />
+//     </View>
+//   );
+// }
+
+// SettingsScreen receives and displays the parameter
+// function DetailsScreen({ route }) {
+//   const { user } = React.useContext(UserContext);
+
+//   return (
+//     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+//       <Text>Settings!</Text>
+//       <Text>User: {user ?? "No user sent"}</Text>
+//     </View>
+//   );
+// }
+
+//pass in route parameters to the details screen
+// function DetailsScreen({ route }) {
+//   const navigation = useNavigation();
+//   /* 2. Get the param */
+//   // const { itemId, otherParam } = route.params;
+//   const itemId = route?.params?.itemId;
+//   const result = route?.params?.result;
+
+//   return (
+//     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+//       <Text>Details Screen</Text>
+//       <Text>itemId: {JSON.stringify(itemId)}</Text>
+//       <Text>Result: {JSON.stringify(result)}result</Text>
+//       {/* <Button
+//         onPress={() =>
+//           navigation.push("Details", {
+//             itemId: Math.floor(Math.random() * 100),
+//           })
+//         }
+//       >
+//         sending data back
+//       </Button> */}
+
+//       <Button onPress={() => navigation.navigate("Home")}>Go to Home</Button>
+//       {/* <Button onPress={() => navigation.goBack()}>Go back</Button>
+//       <Button onPress={() => navigation.popTo("Home")}>Go to Home</Button>
+//       <Button onPress={() => navigation.popToTop()}>
+//         Go to the first screen in the stack
+//       </Button> */}
+//     </View>
+//   );
+// }
+const Tab = createBottomTabNavigator();
+
+// function HomeTabs() {
+//   return (
+//     <Tab.Navigator>
+//       <Tab.Screen name="HomeTab" component={HomeScreen} />
+//       <Tab.Screen name="DatabaseTab" component={DetailsScreen} />
+//     </Tab.Navigator>
+//   );
+// }
+
+// function RootStack() {
+//   return (
+//     <Stack.Navigator
+//       initialRouteName="Home"
+//       screenOptions={{
+//         headerStyle: {
+//           backgroundColor: "#fff",
+//         },
+//         headerTintColor: "#f4511e",
+//         headerTitleStyle: {
+//           fontWeight: "bold",
+//         },
+//       }}
+//     >
+//       <Stack.Screen
+//         name="Home"
+//         component={HomeTabs}
+//         options={{
+//           headerRight: () => (
+//             <Button onPress={() => alert("This is a button!")}>Info</Button>
+//           ),
+//         }}
+//       />
+//       <Stack.Screen
+//         name="Details"
+//         component={DetailsScreen}
+//         initialParams={{ itemId: 42 }} // Initial params for DetailsScreen
+//         options={{ title: "My Details" }} // Custom title for the Details screen
+//       />
+//     </Stack.Navigator>
+//   );
+// }
 
 const Stack = createNativeStackNavigator();
 
 // Main App component
 const App = () => {
-  // State for calculator input/output
-  const [calculation, setCalculation] = useState("");
+  useEffect(() => {
+    console.log("App Useffect", "success");
+    createTable();
+  }, []);
 
-  // Handle calculator button presses
-  const updateCalculation = (value) => {
-    if (value === "=") {
-      // Evaluate the calculation string
-      try {
-        // Evaluate the calculation using JavaScript's Function constructor
-        // WARNING: In production, never use eval or Function with user input!
-        let answer = new Function("return " + calculation)();
-        setCalculation(calculation + "=" + answer);
-      } catch {
-        setCalculation("Error");
-      }
-    } else if (value === "clear") {
-      setCalculation("");
-    } else if (value === "del") {
-      setCalculation(calculation.slice(0, -1)); // Remove last character
-    } else {
-      setCalculation(calculation + String(value)); // Add the pressed value to the calculation string
-    }
+  const createTable = () => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "CREATE TABLE IF NOT EXISTS " +
+          "Users " +
+          "(ID INTEGER PRIMARY KEY AUTOINCREMENT, City TEXT);"
+      );
+    });
   };
 
-  // Memoize styles for performance
-  const styles = useAppStyles();
-
   return (
-    <ImageBackground
-      resizeMode="cover"
-      source={require("./Assets/bgImage.png")} // Background image
-      style={styles.image}
-    >
-      <View style={styles.container}>
-        <SafeAreaView>
-          <ScrollView>
-            <View>
-              <Text style={styles.sectionTitle}>
-                React Native Simple Calculator
-              </Text>
-              <View style={styles.calcBox}>
-                <Text style={styles.outputText}>
-                  {calculation || "Enter a number"}
-                </Text>
-              </View>
-
-              <CalcButtons updateCalculation={updateCalculation} />
-              <NumberButtons updateCalculation={updateCalculation} />
-            </View>
-          </ScrollView>
-        </SafeAreaView>
-      </View>
-      <NavigationContainer>
-        <RootStack />
-      </NavigationContainer>
-    </ImageBackground>
+    <View>
+      <CalcContext.Provider value={{ calcResult, setCalcResult }}>
+        <NavigationContainer>
+          <Tab.Navigator
+            tabBarOptions={{
+              activeTintColor: "#f0f",
+              inactiveTintColor: "#555",
+              activeBackgroundColor: "#fff",
+              inactiveBackgroundColor: "#999",
+              showLabel: true,
+              labelStyle: { fontSize: 10 },
+              showIcon: true,
+            }}
+          >
+            <Tab.Screen name="Calculator" component={CalcMain} />
+            <Tab.Screen name="Database" component={GetDb} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </CalcContext.Provider>
+    </View>
   );
 };
 

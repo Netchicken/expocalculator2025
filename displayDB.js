@@ -1,35 +1,100 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useContext } from "react";
+//import SQLite from "react-native-sqlite-2";
+import SQLite from "react-native-sqlite-storage"; // Import SQLite for database operations
 import {
+  Text, // Renders text
   SafeAreaView,
   ScrollView,
-  Text,
   View,
-  ImageBackground,
 } from "react-native";
-import { createStaticNavigation } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useDbOperationStyles } from "../AllStyles/dbOperationsStyles"; // Import styles
 
-function DBScreen() {
+import { CalcContext } from "./CalcContext";
+
+const databaseName = "calcDB.db";
+let singleAnswer = "";
+
+// Function to set the answer to be inserted
+export const PassData = ({ data }) => {
+  singleAnswer = data;
+};
+
+// Component to get and display database answers
+export const GetDb = () => {
+  const styles = useDbOperationStyles(); // Use custom hook for styles
+  const [listAnswers, setListAnswers] = useState([]); // State for answers
+  const { calcResult } = useContext(CalcContext);
+  singleAnswer = calcResult; // Use the latest calculation result from context
+
+  useEffect(() => {
+    // Open the database
+    const db = SQLite.openDatabase(
+      { name: "calcDB.db", location: "default" },
+      () => {
+        console.log("DB opened");
+      },
+      (error) => {
+        console.log("DB open error:", error);
+      }
+    );
+    //Check that db is not null before using it:
+
+    if (!db) {
+      console.log("Database not opened!");
+      return;
+    }
+    // SQL to create table if it doesn't exist
+    const createString =
+      "CREATE TABLE IF NOT EXISTS AllAnswers(Id INTEGER PRIMARY KEY AUTOINCREMENT, answer TEXT)";
+
+    db.transaction((txn) => {
+      // Create table
+      txn.executeSql(
+        createString,
+        [],
+        () => {},
+        (error) => {
+          console.log("execute error: " + JSON.stringify(error));
+        }
+      );
+
+      // Insert answer if available
+      if (singleAnswer !== "") {
+        txn.executeSql("INSERT INTO AllAnswers (answer) VALUES (?)", [
+          singleAnswer,
+        ]);
+        singleAnswer = ""; // Reset after insert
+      }
+
+      // Select all answers from the table
+      txn.executeSql(
+        "SELECT answer FROM AllAnswers",
+        [],
+        (tx, result) => {
+          const answers = [];
+          for (let i = 0; i < result.rows.length; ++i) {
+            answers.push(result.rows.item(i).answer);
+          }
+          setListAnswers(answers); // Update state
+        },
+        (error) => {
+          console.log("select error: " + JSON.stringify(error));
+        }
+      );
+    });
+  }, []); // Run only once when component mounts
+
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Database Screen</Text>
-      <Button onPress={() => navigation.push("DBScreen")}>
-        Go to Database... again
-      </Button>
-      <Button onPress={() => navigation.goBack()}>Go back</Button>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        {listAnswers &&
+          listAnswers.map((item, index) => (
+            <View key={index}>
+              <Text style={styles.text}>{item}</Text>
+              <Text>Latest Calculation: {calcResult}</Text>
+            </View>
+          ))}
+      </ScrollView>
+    </SafeAreaView>
   );
-}
-
-const RootStack = createNativeStackNavigator({
-  initialRouteName: "Home",
-  screens: {
-    Home: { screen: HomeScreen, options: { title: "Overview" } },
-    Details: DBScreen,
-  },
-});
-
-const Navigation = createStaticNavigation(RootStack);
-export default function displayDB() {
-  return <Navigation />;
-}
+};
