@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import { useDbOperationStyles } from "./AllStyles/dbOperationsStyles"; // Import styles
+import { CalcContext } from "./calcContext";
 
 const databaseName = "calcDB.db";
 let singleAnswer = "";
@@ -21,7 +22,7 @@ export const PassData = ({ data }) => {
 export const GetDb = () => {
   const styles = useDbOperationStyles(); // Use custom hook for styles
   const [listAnswers, setListAnswers] = useState([]); // State for answers
-
+  const { calcResult, setCalcResult } = React.useContext(CalcContext);
   useEffect(() => {
     // Open the database
     const db = SQLite.openDatabase(
@@ -53,13 +54,14 @@ export const GetDb = () => {
           console.log("execute error: " + JSON.stringify(error));
         }
       );
-
+      singleAnswer = calcResult;
       // Insert answer if available
       if (singleAnswer !== "") {
         txn.executeSql("INSERT INTO AllAnswers (answer) VALUES (?)", [
           singleAnswer,
         ]);
         singleAnswer = ""; // Reset after insert
+        setCalcResult(""); //reset user to empty string
       }
 
       // Select all answers from the table

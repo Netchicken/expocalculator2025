@@ -9,22 +9,22 @@ import {
 } from "react-native";
 import { useDbOperationStyles } from "../AllStyles/dbOperationsStyles"; // Import styles
 
-import { CalcContext } from "./CalcContext";
+import { CalcContext } from "./Operations/calcContext"; // Import context for calculator operations
 
 const databaseName = "calcDB.db";
 let singleAnswer = "";
 
 // Function to set the answer to be inserted
 export const PassData = ({ data }) => {
-  singleAnswer = data;
+  //  singleAnswer = data;
 };
 
 // Component to get and display database answers
 export const GetDb = () => {
   const styles = useDbOperationStyles(); // Use custom hook for styles
   const [listAnswers, setListAnswers] = useState([]); // State for answers
-  const { calcResult } = useContext(CalcContext);
-  singleAnswer = calcResult; // Use the latest calculation result from context
+  const { calcResult, setCalcResult } = React.useContext(CalcContext);
+  // singleAnswer = calcResult; // Use the latest calculation result from context
 
   useEffect(() => {
     // Open the database
@@ -57,13 +57,14 @@ export const GetDb = () => {
           console.log("execute error: " + JSON.stringify(error));
         }
       );
-
+      singleAnswer = calcResult;
       // Insert answer if available
       if (singleAnswer !== "") {
         txn.executeSql("INSERT INTO AllAnswers (answer) VALUES (?)", [
           singleAnswer,
         ]);
         singleAnswer = ""; // Reset after insert
+        setCalcResult(""); //reset user to empty string
       }
 
       // Select all answers from the table

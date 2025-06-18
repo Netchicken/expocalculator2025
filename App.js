@@ -20,18 +20,138 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { CalcContext } from "./Operations/calcContext"; // or wherever you define it
 
 //we need to check that there is a dabase here and working before entering the game
-const db = SQLite.openDatabase(
-  {
-    name: "Store.db",
-    location: "default",
-  },
-  () => {
-    console.log("App DB open exists", "success");
-  },
-  (error) => {
-    console.log("App DB open error", error);
-  }
-);
+// const db = SQLite.openDatabase(
+//   {
+//     name: "Store.db",
+//     location: "default",
+//   },
+//   () => {
+//     console.log("App DB open exists", "success");
+//   },
+//   (error) => {
+//     console.log("App DB open error", error);
+//   }
+// );
+
+const Tab = createBottomTabNavigator();
+// Example Home screen component
+function CalcMainScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text style={{ fontSize: 24 }}>Calculator Screen</Text>
+      <Button
+        title="Go to Calculator"
+        onPress={() => navigation.navigate("calcMain")}
+      />
+    </View>
+  );
+}
+
+// Example Profile screen component
+function DbScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text style={{ fontSize: 24 }}>Database Screen</Text>
+      <Button
+        title="Go to Settings Tab"
+        onPress={() => navigation.navigate("DbOperations")}
+      />
+    </View>
+  );
+}
+
+// Main App component
+const App = () => {
+  // useEffect(() => {
+  //   console.log("App Useffect", "success");
+  //   createTable();
+  // }, []);
+
+  // const createTable = () => {
+  //   db.transaction((tx) => {
+  //     tx.executeSql(
+  //       "CREATE TABLE IF NOT EXISTS " +
+  //         "Users " +
+  //         "(ID INTEGER PRIMARY KEY AUTOINCREMENT, City TEXT);"
+  //     );
+  //   });
+  // };
+
+  return (
+    <View>
+      <CalcContext.Provider value={{ calcResult, setCalcResult }}>
+        <NavigationContainer>
+          <Tab.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              headerShown: true, // Show header on each tab screen
+              tabBarActiveTintColor: "#1976d2", // Active tab color
+              tabBarInactiveTintColor: "#888", // Inactive tab color
+              tabBarStyle: { backgroundColor: "#e3f2fd" }, // Tab bar style
+            }}
+          >
+            <Tab.Screen
+              name="Calculator"
+              component={CalcMainScreen}
+              options={{ tabBarLabel: "Home" }}
+            />
+            <Tab.Screen
+              name="Database"
+              component={DbScreen}
+              options={{ tabBarLabel: "Database" }}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </CalcContext.Provider>
+    </View>
+  );
+};
+
+export default App;
+
+//const Stack = createNativeStackNavigator();
+
+// function HomeTabs() {
+//   return (
+//     <Tab.Navigator>
+//       <Tab.Screen name="HomeTab" component={HomeScreen} />
+//       <Tab.Screen name="DatabaseTab" component={DetailsScreen} />
+//     </Tab.Navigator>
+//   );
+// }
+
+// function RootStack() {
+//   return (
+//     <Stack.Navigator
+//       initialRouteName="Home"
+//       screenOptions={{
+//         headerStyle: {
+//           backgroundColor: "#fff",
+//         },
+//         headerTintColor: "#f4511e",
+//         headerTitleStyle: {
+//           fontWeight: "bold",
+//         },
+//       }}
+//     >
+//       <Stack.Screen
+//         name="Home"
+//         component={HomeTabs}
+//         options={{
+//           headerRight: () => (
+//             <Button onPress={() => alert("This is a button!")}>Info</Button>
+//           ),
+//         }}
+//       />
+//       <Stack.Screen
+//         name="Details"
+//         component={DetailsScreen}
+//         initialParams={{ itemId: 42 }} // Initial params for DetailsScreen
+//         options={{ title: "My Details" }} // Custom title for the Details screen
+//       />
+//     </Stack.Navigator>
+//   );
+// }
 
 //function name is where it navigates to
 // function HomeScreen() {
@@ -112,91 +232,3 @@ const db = SQLite.openDatabase(
 //     </View>
 //   );
 // }
-const Tab = createBottomTabNavigator();
-
-// function HomeTabs() {
-//   return (
-//     <Tab.Navigator>
-//       <Tab.Screen name="HomeTab" component={HomeScreen} />
-//       <Tab.Screen name="DatabaseTab" component={DetailsScreen} />
-//     </Tab.Navigator>
-//   );
-// }
-
-// function RootStack() {
-//   return (
-//     <Stack.Navigator
-//       initialRouteName="Home"
-//       screenOptions={{
-//         headerStyle: {
-//           backgroundColor: "#fff",
-//         },
-//         headerTintColor: "#f4511e",
-//         headerTitleStyle: {
-//           fontWeight: "bold",
-//         },
-//       }}
-//     >
-//       <Stack.Screen
-//         name="Home"
-//         component={HomeTabs}
-//         options={{
-//           headerRight: () => (
-//             <Button onPress={() => alert("This is a button!")}>Info</Button>
-//           ),
-//         }}
-//       />
-//       <Stack.Screen
-//         name="Details"
-//         component={DetailsScreen}
-//         initialParams={{ itemId: 42 }} // Initial params for DetailsScreen
-//         options={{ title: "My Details" }} // Custom title for the Details screen
-//       />
-//     </Stack.Navigator>
-//   );
-// }
-
-const Stack = createNativeStackNavigator();
-
-// Main App component
-const App = () => {
-  useEffect(() => {
-    console.log("App Useffect", "success");
-    createTable();
-  }, []);
-
-  const createTable = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS " +
-          "Users " +
-          "(ID INTEGER PRIMARY KEY AUTOINCREMENT, City TEXT);"
-      );
-    });
-  };
-
-  return (
-    <View>
-      <CalcContext.Provider value={{ calcResult, setCalcResult }}>
-        <NavigationContainer>
-          <Tab.Navigator
-            tabBarOptions={{
-              activeTintColor: "#f0f",
-              inactiveTintColor: "#555",
-              activeBackgroundColor: "#fff",
-              inactiveBackgroundColor: "#999",
-              showLabel: true,
-              labelStyle: { fontSize: 10 },
-              showIcon: true,
-            }}
-          >
-            <Tab.Screen name="Calculator" component={CalcMain} />
-            <Tab.Screen name="Database" component={GetDb} />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </CalcContext.Provider>
-    </View>
-  );
-};
-
-export default App;
