@@ -7,7 +7,7 @@ import {
   ScrollView,
   View,
 } from "react-native";
-import { useDbOperationStyles } from "../AllStyles/dbOperationsStyles"; // Import styles
+import { useDbOperationStyles } from "./AllStyles/dbOperationsStyles"; // Import styles
 
 const databaseName = "calcDB.db";
 let singleAnswer = "";
